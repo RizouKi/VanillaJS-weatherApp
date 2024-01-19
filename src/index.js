@@ -26,14 +26,46 @@ function updateWeather(response) {
     windSpeedElement.innerHTML = windSpeed;
     weatherIconElement.className = weatherIconName;
     weatherIconElement.src = weatherIconUrl;
+
+    let now = new Date();
+    let dataDate = getDate(now);
+    updateDate(dataDate.weekDay, dataDate.time);
   } else {
     alert("Enter an existing city please");
   }
 }
 
-function getDate(date) {}
-function updateDate(day, time) {}
+function getDate(date) {
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  let weekDay = days[date.getDay()];
+  let time = `${hours}:${minutes}`;
+  let dateData = { weekDay: weekDay, time: time };
 
+  return dateData;
+}
+function updateDate(day, time) {
+  let weekDayElement = document.querySelector(".week-day");
+  let timeElement = document.querySelector(".time");
+
+  weekDayElement.innerHTML = day;
+  timeElement.innerHTML = time;
+}
 function searchCity(city) {
   let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
   let unit = "metric";
@@ -41,14 +73,12 @@ function searchCity(city) {
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${query}&key=${apiKey}&units=${unit}`;
   axios.get(apiUrl).then(updateWeather);
 }
-
 function handleSearchSubmit(event) {
   event.preventDefault();
   let searchInput = document.querySelector(".form-input");
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
 }
-
 let searchFormElement = document.querySelector(".search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
