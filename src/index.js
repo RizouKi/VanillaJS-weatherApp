@@ -18,6 +18,8 @@ function updateWeather(response) {
     let weatherIconUrl = response.data.condition.icon_url;
     let weatherIconName = response.data.condition.icon;
     let weatherIconElement = document.querySelector(".current-temperature img");
+    let windDirectionElement = document.querySelector(".wind-direction");
+    let windDirection = response.data.wind.degree;
 
     cityElement.innerHTML = city;
     temperatureElement.innerHTML = temperature;
@@ -26,6 +28,7 @@ function updateWeather(response) {
     windSpeedElement.innerHTML = windSpeed;
     weatherIconElement.className = weatherIconName;
     weatherIconElement.src = weatherIconUrl;
+    windDirectionElement.style.transform = `rotate(${windDirection}deg)`;
 
     let now = new Date();
     let dataDate = getDate(now);
