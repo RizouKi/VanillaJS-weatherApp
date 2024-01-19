@@ -37,7 +37,6 @@ function updateWeather(response) {
     alert("Enter an existing city please");
   }
 }
-
 function getDate(date) {
   let days = [
     "Sunday",
@@ -82,6 +81,7 @@ function handleSearchSubmit(event) {
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
 }
+
 let searchFormElement = document.querySelector(".search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
