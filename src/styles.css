@@ -75,8 +75,8 @@ h1 {
   top: 14px;
 }
 .current-temperature img {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   position: relative;
   top: 12px;
 }
@@ -100,4 +100,34 @@ h1 {
   top: 5px;
   transform: rotate(0deg);
   font-size: 20px;
+}
+.weather-forecast {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+.weather-forecast-weekday {
+  text-align: center;
+  color: rgba(39, 33, 66, 0.4);
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 4px;
+}
+
+.weather-forecast-icon img {
+  width: 90px;
+  height: 90px;
+}
+
+.weather-forecast-temperatures {
+  text-align: center;
+  color: #f65282;
+  margin-top: 1px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.weather-forecast-temperature-max {
+  font-weight: 600;
 }
