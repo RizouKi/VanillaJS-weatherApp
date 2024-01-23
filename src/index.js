@@ -20,6 +20,8 @@ function updateWeather(response) {
     let weatherIconElement = document.querySelector(".current-temperature img");
     let windDirectionElement = document.querySelector(".wind-direction");
     let windDirection = response.data.wind.degree;
+    let now = new Date();
+    let dataDate = getDate(now);
 
     cityElement.innerHTML = city;
     temperatureElement.innerHTML = temperature;
@@ -30,9 +32,8 @@ function updateWeather(response) {
     weatherIconElement.src = weatherIconUrl;
     windDirectionElement.style.transform = `rotate(${windDirection}deg)`;
 
-    let now = new Date();
-    let dataDate = getDate(now);
     updateDate(dataDate.weekDay, dataDate.time);
+    getForecast(response.data.city);
   } else {
     alert("Enter an existing city please");
   }
@@ -71,8 +72,7 @@ function updateDate(day, time) {
 function searchCity(city) {
   let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
   let unit = "metric";
-  let query = city;
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${query}&key=${apiKey}&units=${unit}`;
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
   axios.get(apiUrl).then(updateWeather);
 }
 function handleSearchSubmit(event) {
@@ -81,7 +81,16 @@ function handleSearchSubmit(event) {
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
 }
-function displayForecast() {
+
+function getForecast(city) {
+  let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
+  let unit = "metric";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
+  axios.get(apiUrl).then(displayForecast);
+}
+function displayForecast(response) {
+  console.log(response.data);
+
   let weekDays = ["Tue", "Wed", "Thu", "Fri", "Sat"];
   let forecastHtml = "";
 
@@ -111,4 +120,3 @@ let searchFormElement = document.querySelector(".search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 searchCity("Lausanne");
-displayForecast();
