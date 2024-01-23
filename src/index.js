@@ -81,7 +81,11 @@ function handleSearchSubmit(event) {
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
 }
-
+function formatWeekDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[date.getDay()];
+}
 function getForecast(city) {
   let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
   let unit = "metric";
@@ -89,27 +93,32 @@ function getForecast(city) {
   axios.get(apiUrl).then(displayForecast);
 }
 function displayForecast(response) {
-  console.log(response.data);
-
-  let weekDays = ["Tue", "Wed", "Thu", "Fri", "Sat"];
   let forecastHtml = "";
 
-  weekDays.forEach(function (weekDay) {
-    forecastHtml += `
+  response.data.daily.forEach(function (weekDay, index) {
+    if (index < 5) {
+      forecastHtml += `
       <div class="weather-forecast-day">
-            <div class="weather-forecast-weekday">${weekDay}</div>
+            <div class="weather-forecast-weekday">${formatWeekDay(
+              weekDay.time
+            )}</div>
             <div class="weather-forecast-icon">
               <img
-                src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/rain-day.png"
-                class="rain-day"
+                src="${weekDay.condition.icon_url}"
+                class="${weekDay.condition.icon}"
               />
             </div>
             <div class="weather-forecast-temperatures">
-              <span class="weather-forecast-temperature-max">15º</span>
-              <span class="weather-forecast-temperature-min">11º</span>
+              <span class="weather-forecast-temperature-max">${Math.round(
+                weekDay.temperature.maximum
+              )}º</span>
+              <span class="weather-forecast-temperature-min">${Math.round(
+                weekDay.temperature.minimum
+              )}º</span>
             </div>
           </div>
     `;
+    }
   });
 
   let forecastElement = document.querySelector("#forecast");
