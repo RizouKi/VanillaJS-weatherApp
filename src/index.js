@@ -20,6 +20,8 @@ function updateWeather(response) {
     let weatherIconElement = document.querySelector(".current-temperature img");
     let windDirectionElement = document.querySelector(".wind-direction");
     let windDirection = response.data.wind.degree;
+    let now = new Date();
+    let dataDate = getDate(now);
 
     cityElement.innerHTML = city;
     temperatureElement.innerHTML = temperature;
@@ -30,9 +32,8 @@ function updateWeather(response) {
     weatherIconElement.src = weatherIconUrl;
     windDirectionElement.style.transform = `rotate(${windDirection}deg)`;
 
-    let now = new Date();
-    let dataDate = getDate(now);
     updateDate(dataDate.weekDay, dataDate.time);
+    getForecast(response.data.city);
   } else {
     alert("Enter an existing city please");
   }
@@ -71,8 +72,7 @@ function updateDate(day, time) {
 function searchCity(city) {
   let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
   let unit = "metric";
-  let query = city;
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${query}&key=${apiKey}&units=${unit}`;
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
   axios.get(apiUrl).then(updateWeather);
 }
 function handleSearchSubmit(event) {
@@ -80,6 +80,54 @@ function handleSearchSubmit(event) {
   let searchInput = document.querySelector(".form-input");
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
+}
+function formatWeekDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[date.getDay()];
+}
+function getForecast(city) {
+  let apiKey = "c418bef3eo7aacdt413e1d00f5a173c4";
+  let unit = "metric";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
+  axios.get(apiUrl).then(displayForecast);
+}
+function displayForecast(response) {
+  let forecastHtml = "";
+  let todayForecastHtml = "";
+  response.data.daily.forEach(function (weekDay, index) {
+    if (index < 5) {
+      if (index === 0) {
+        todayForecastHtml = `<div class="weather-forecast-day today">`;
+      } else {
+        todayForecastHtml = `<div class="weather-forecast-day">`;
+      }
+
+      forecastHtml += `${todayForecastHtml}
+            <div class="weather-forecast-weekday">${formatWeekDay(
+              weekDay.time
+            )}</div>
+            <div class="weather-forecast-icon">
+              <img
+                src="${weekDay.condition.icon_url}"
+                class="${weekDay.condition.icon}"
+              />
+            </div>
+            <div class="weather-forecast-temperatures">
+              <span class="weather-forecast-temperature-max">${Math.round(
+                weekDay.temperature.maximum
+              )}º</span>
+              <span class="weather-forecast-temperature-min">${Math.round(
+                weekDay.temperature.minimum
+              )}º</span>
+            </div>
+          </div>
+    `;
+    }
+  });
+
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = forecastHtml;
 }
 
 let searchFormElement = document.querySelector(".search-form");
