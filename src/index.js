@@ -81,8 +81,34 @@ function handleSearchSubmit(event) {
   let city = searchInput.value.trim().toLowerCase();
   searchCity(city);
 }
+function displayForecast() {
+  let weekDays = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let forecastHtml = "";
+
+  weekDays.forEach(function (weekDay) {
+    forecastHtml += `
+      <div class="weather-forecast-day">
+            <div class="weather-forecast-weekday">${weekDay}</div>
+            <div class="weather-forecast-icon">
+              <img
+                src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/rain-day.png"
+                class="rain-day"
+              />
+            </div>
+            <div class="weather-forecast-temperatures">
+              <span class="weather-forecast-temperature-max">15º</span>
+              <span class="weather-forecast-temperature-min">11º</span>
+            </div>
+          </div>
+    `;
+  });
+
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = forecastHtml;
+}
 
 let searchFormElement = document.querySelector(".search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 searchCity("Lausanne");
+displayForecast();
