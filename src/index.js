@@ -94,11 +94,16 @@ function getForecast(city) {
 }
 function displayForecast(response) {
   let forecastHtml = "";
-
+  let todayForecastHtml = "";
   response.data.daily.forEach(function (weekDay, index) {
     if (index < 5) {
-      forecastHtml += `
-      <div class="weather-forecast-day">
+      if (index === 0) {
+        todayForecastHtml = `<div class="weather-forecast-day today">`;
+      } else {
+        todayForecastHtml = `<div class="weather-forecast-day">`;
+      }
+
+      forecastHtml += `${todayForecastHtml}
             <div class="weather-forecast-weekday">${formatWeekDay(
               weekDay.time
             )}</div>

@@ -102,8 +102,15 @@ h1 {
 }
 .weather-forecast {
   display: flex;
-  justify-content: space-around;
-  margin-top: 50px;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.weather-forecast-day {
+  border-radius: 10px;
+  padding: 20px 10px;
+}
+.weather-forecast-day.today {
+  background-color: #f9f7fe;
 }
 
 .weather-forecast-weekday {
@@ -112,6 +119,14 @@ h1 {
   font-size: 16px;
   line-height: 20px;
   margin-bottom: 4px;
+}
+.today .weather-forecast-weekday {
+  text-align: center;
+  color: rgba(39, 33, 66, 0.4);
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 4px;
+  font-weight: 500;
 }
 
 .weather-forecast-icon img {
